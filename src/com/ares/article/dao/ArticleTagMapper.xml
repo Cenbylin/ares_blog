@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ares.article.dao.ArticleMapper">
+	<resultMap id="BaseResultMap" type="com.ares.article.po.ArticleTag">
+		<id column="tag_id" property="tagId" jdbcType="INTEGER" />
+		<result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+		<result column="article_num" property="articleNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="getTags" resultMap="BaseResultMap">
+		SELECT * FROM article_tag
+	</select>
+
+</mapper>

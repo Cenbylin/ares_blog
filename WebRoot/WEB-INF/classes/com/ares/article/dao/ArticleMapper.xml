@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.ares.article.dao.ArticleMapper">
+	<sql id="selectArticleId">
+	<!-- 获得指定标签下文章列表 -->
+		SELECT article_id FROM tag_of_article where tag_id=#{tagId}
+	</sql>
+	<sql id="pagination">
+	<!-- 分页 -->
+		LIMIT #{pageNum},#{pageSize} 
+	</sql>
+	<sql id="ordering">
+	<!-- 排序 -->
+		ORDER BY article_sort DESC
+	</sql>
+	
 	<resultMap id="BaseResultMap" type="com.ares.article.po.ArticleBase">
 		<id column="article_id" property="articleId" jdbcType="INTEGER" />
 		<result column="article_sort" property="articleSort" jdbcType="INTEGER" />
@@ -21,6 +34,44 @@
 	
 	<select id="getArticleById" parameterType="integer" resultMap="ResultMapWithBLOBs">
 		SELECT * FROM article_base WHERE article_id=#{articleId}
+	</select>
+	
+	<delete id="deleteArticleById" parameterType="integer">
+		DELETE FROM article_base WHERE article_id=#{articleId}
+	</delete>
+	
+	<update id="updateArticle" parameterType="com.ares.article.po.ArticleBase">
+		UPDATE article_base SET 
+		article_sort=#{articleSort},
+		article_title=#{articleTitle},
+		create_time=#{createTime},
+		article_state=#{articleState},
+		article_intro=#{articleIntro},
+		article_content=#{articleContent}
+		WHERE article_id=#{articleId}
+	</update>
+	
+	<insert id="addArticle" parameterType="com.ares.article.po.ArticleBase">
+		INSERT INTO article_base (article_sort,article_title,create_time,article_state,article_intro,article_content)
+		VALUES
+		(#{articleSort},#{articleTitle},#{createTime},#{articleState},#{articleIntro},#{articleContent})
+	</insert>
+	
+	<!-- 通过第三方表，建立多对多关系 -->
+	<select id="getArticleByTagId" resultMap="ResultMapWithBLOBs">
+		SELECT * FROM article_base
+		WHERE 
+		article_id IN (<include refid="selectArticleId"/>)
+		<include refid="ordering"/>
+		<include refid="pagination"/>
+	</select>
+	
+	<select id="getArticles" resultMap="ResultMapWithBLOBs">
+		SELECT * FROM article_base
+		WHERE 
+		article_id IN (<include refid="selectArticleId"/>)
+		<include refid="ordering"/>
+		<include refid="pagination"/>
 	</select>
 
 </mapper>
