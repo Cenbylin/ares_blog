@@ -1,6 +1,7 @@
 package com.ares.article.po;
 
 import java.util.Date;
+import java.util.List;
 
 public class ArticleComment {
     private Integer commId;
@@ -10,7 +11,7 @@ public class ArticleComment {
     private Integer parentId;
 
     private String personName;
-
+    
     private String personEmail;
 
     private String commContent;
@@ -20,6 +21,8 @@ public class ArticleComment {
     private Integer commSort;
 
     private String commIp;
+    
+    private List<ArticleComment> childComms;
 
     public Integer getCommId() {
         return commId;
@@ -92,4 +95,12 @@ public class ArticleComment {
     public void setCommIp(String commIp) {
         this.commIp = commIp == null ? null : commIp.trim();
     }
+
+	public List<ArticleComment> getChildComms() {
+		return childComms;
+	}
+
+	public void setChildComms(List<ArticleComment> childComms) {
+		this.childComms = childComms;
+	}
 }

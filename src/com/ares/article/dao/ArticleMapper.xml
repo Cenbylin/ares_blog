@@ -14,6 +14,18 @@
 	<!-- 排序 -->
 		ORDER BY article_sort DESC
 	</sql>
+	<sql id="baseQuery">
+		SELECT 
+		article_base.article_id,article_base.article_sort,article_base.article_title,article_base.create_time,article_base.article_state,article_base.article_intro,article_data.comment_num,article_data.share_num,article_data.watch_num,article_tag.tag_id,article_tag.tag_name 
+		FROM article_base,article_data,article_tag,tag_of_article
+		WHERE article_base.article_id=tag_of_article.article_id AND article_tag.tag_id=tag_of_article.tag_id
+	</sql>
+	<sql id="getMaxArticleId">
+		SELECT MAX(article_id) FROM article_base
+	</sql>
+	<sql id="getMaxSort">
+		SELECT MAX(article_sort) FROM article_base
+	</sql>
 	
 	<resultMap id="BaseResultMap" type="com.ares.article.po.ArticleBase">
 		<id column="article_id" property="articleId" jdbcType="INTEGER" />
@@ -25,6 +37,16 @@
 			jdbcType="INTEGER" />
 		<result column="article_intro" property="articleIntro"
 			jdbcType="VARCHAR" />
+		<result column="comment_num" property="commentNum"
+			jdbcType="INTEGER" />
+		<result column="share_num" property="shareNum"
+			jdbcType="INTEGER" />
+		<result column="watch_num" property="watchNum"
+			jdbcType="INTEGER" />
+		<collection property="articleTags" ofType="com.ares.article.po.ArticleTag">
+			<id column="tag_id" property="tagId"/>
+			<result column="tag_name" property="tagName"/>
+		</collection>
 	</resultMap>
 	<resultMap id="ResultMapWithBLOBs" type="com.ares.article.po.ArticleBase"
 		extends="BaseResultMap">
@@ -33,11 +55,14 @@
 	</resultMap>
 	
 	<select id="getArticleById" parameterType="integer" resultMap="ResultMapWithBLOBs">
-		SELECT * FROM article_base WHERE article_id=#{articleId}
+		SELECT 
+		*
+		FROM article_base,article_data,article_tag,tag_of_article WHERE article_base.article_id=#{articleId} AND article_base.article_id=tag_of_article.article_id AND article_tag.tag_id=tag_of_article.tag_id
 	</select>
 	
 	<delete id="deleteArticleById" parameterType="integer">
-		DELETE FROM article_base WHERE article_id=#{articleId}
+		DELETE FROM article_base WHERE article_id=#{articleId};
+		DELETE FROM article_data WHERE article_id=#{articleId};
 	</delete>
 	
 	<update id="updateArticle" parameterType="com.ares.article.po.ArticleBase">
@@ -54,12 +79,16 @@
 	<insert id="addArticle" parameterType="com.ares.article.po.ArticleBase">
 		INSERT INTO article_base (article_sort,article_title,create_time,article_state,article_intro,article_content)
 		VALUES
-		(#{articleSort},#{articleTitle},#{createTime},#{articleState},#{articleIntro},#{articleContent})
+		((<include refid="getMaxSort"/>),#{articleTitle},#{createTime},#{articleState},#{articleIntro},#{articleContent});
+		<!-- 同时创建关联data表 -->
+		INSERT INTO article_base (article_id,watch_num,share_num,comment_num)
+		VALUES
+		((<include refid="getMaxArticleId"/>),0,0,0);
 	</insert>
 	
 	<!-- 通过第三方表，建立多对多关系 -->
 	<select id="getArticleByTagId" resultMap="ResultMapWithBLOBs">
-		SELECT * FROM article_base
+		SELECT article_sort,article_title,create_time,article_state,article_intro FROM article_base
 		WHERE 
 		article_id IN (<include refid="selectArticleId"/>)
 		<include refid="ordering"/>
@@ -67,11 +96,13 @@
 	</select>
 	
 	<select id="getArticles" resultMap="ResultMapWithBLOBs">
-		SELECT * FROM article_base
-		WHERE 
-		article_id IN (<include refid="selectArticleId"/>)
+		<include refid="baseQuery"/>
+		AND article_base.article_sort=0
+		UNION
+		(<include refid="baseQuery"/>
+		AND article_base.article_id=article_data.article_id AND article_base.article_sort&lt;&gt;0
 		<include refid="ordering"/>
-		<include refid="pagination"/>
+		<include refid="pagination"/>)
 	</select>
 
 </mapper>

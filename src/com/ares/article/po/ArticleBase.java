@@ -1,6 +1,9 @@
 package com.ares.article.po;
 
 import java.util.Date;
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ArticleBase {
     private Integer articleId;
@@ -14,8 +17,18 @@ public class ArticleBase {
     private Integer articleState;
 
     private String articleIntro;
-
+    @JsonIgnore
     private byte[] articleContent;
+    
+    private Integer commentNum;
+    
+    private Integer shareNum;
+    
+    private Integer watchNum;
+    
+    private List<ArticleComment> articleComms;
+    
+    private List<ArticleTag> articleTags;
 
     public Integer getArticleId() {
         return articleId;
@@ -72,4 +85,44 @@ public class ArticleBase {
     public void setArticleContent(byte[] articleContent) {
         this.articleContent = articleContent;
     }
+
+	public List<ArticleComment> getArticleComms() {
+		return articleComms;
+	}
+
+	public void setArticleComms(List<ArticleComment> articleComms) {
+		this.articleComms = articleComms;
+	}
+
+	public Integer getCommentNum() {
+		return commentNum;
+	}
+
+	public void setCommentNum(Integer commentNum) {
+		this.commentNum = commentNum;
+	}
+
+	public Integer getShareNum() {
+		return shareNum;
+	}
+
+	public void setShareNum(Integer shareNum) {
+		this.shareNum = shareNum;
+	}
+
+	public Integer getWatchNum() {
+		return watchNum;
+	}
+
+	public void setWatchNum(Integer watchNum) {
+		this.watchNum = watchNum;
+	}
+
+	public List<ArticleTag> getArticleTags() {
+		return articleTags;
+	}
+
+	public void setArticleTags(List<ArticleTag> articleTags) {
+		this.articleTags = articleTags;
+	}
 }

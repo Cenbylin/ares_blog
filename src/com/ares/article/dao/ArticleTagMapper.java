@@ -11,4 +11,10 @@ public interface ArticleTagMapper {
 	 * @throws Exception
 	 */
 	public List<ArticleTag> getTags() throws Exception;
+	/**
+	 * 查询article的关联tag
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ArticleTag> getTagByArticleId(Integer articleId) throws Exception;
 }

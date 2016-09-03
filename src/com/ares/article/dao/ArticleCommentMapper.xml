@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ares.article.dao.ArticleCommentMapper">
+	<resultMap id="BaseResultMap" type="com.ares.article.po.ArticleComment">
+		<id column="comm_id" property="commId" jdbcType="INTEGER" />
+		<result column="article_id" property="articleId" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="person_name" property="personName" jdbcType="VARCHAR" />
+		<result column="person_email" property="personEmail" jdbcType="VARCHAR" />
+		<result column="comm_content" property="commContent" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="comm_sort" property="commSort" jdbcType="INTEGER" />
+		<result column="comm_ip" property="commIp" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="addComment" parameterType="com.ares.article.po.ArticleComment">
+		INSERT INTO article_comment (article_id,parent_id,person_name,person_email,comm_content,create_time,comm_sort,comm_ip)
+		VALUES
+		(#{articleId},#{parentId},#{personName},#{personEmail},#{commContent},#{createTime},#{commSort},#{commIp})
+	</insert>
+	
+	<delete id="deleteComment" parameterType="integer">
+		DELETE FROM article_comment WHERE comm_id=#{commId}
+	</delete>
+	
+	<delete id="deleteComments" parameterType="java.util.List">
+		DELETE FROM article_comment WHERE comm_id IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="getAllByArticle" parameterType="integer" resultType="integer">
+		SELECT comm_id FROM article_comment WHERE article_id=#{articleId}
+	</select>
+	
+	<select id="getTopCommByArticle" parameterType="integer" resultMap="BaseResultMap">
+		SELECT * FROM article_comment WHERE article_id=#{articleId} AND parent_id=0
+	</select>
+	
+	<select id="getSecondComm" parameterType="integer" resultMap="BaseResultMap">
+		SELECT * FROM article_comment WHERE parent_id=#{topCommId}
+	</select>
+</mapper>

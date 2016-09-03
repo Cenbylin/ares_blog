@@ -39,8 +39,7 @@ public interface ArticleMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ArticleBase> getArticles(@Param("pageNum") Integer pageNum,
-			@Param("pageSize") Integer pageSize) throws Exception;
+	public List<ArticleBase> getArticles(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize) throws Exception;
 	/**
 	 * 根据标签id获得博文列表（分页）
 	 * @param tagId 标签id

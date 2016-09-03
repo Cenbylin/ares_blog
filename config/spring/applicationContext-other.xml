@@ -20,4 +20,6 @@
 			</list>
 		</property>
 	</bean>
+	<!-- 权限校验器 -->
+	<bean class="com.ares.common.authorization.AuthorityDisposer"/>
 </beans>
