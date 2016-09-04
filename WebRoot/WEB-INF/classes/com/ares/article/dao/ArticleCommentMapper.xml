@@ -7,6 +7,7 @@
 		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
 		<result column="person_name" property="personName" jdbcType="VARCHAR" />
 		<result column="person_email" property="personEmail" jdbcType="VARCHAR" />
+		<result column="person_url" property="personUrl" jdbcType="VARCHAR" />
 		<result column="comm_content" property="commContent" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="comm_sort" property="commSort" jdbcType="INTEGER" />
@@ -14,9 +15,9 @@
 	</resultMap>
 
 	<insert id="addComment" parameterType="com.ares.article.po.ArticleComment">
-		INSERT INTO article_comment (article_id,parent_id,person_name,person_email,comm_content,create_time,comm_sort,comm_ip)
+		INSERT INTO article_comment (article_id,parent_id,person_name,person_email,person_url,comm_content,create_time,comm_sort,comm_ip)
 		VALUES
-		(#{articleId},#{parentId},#{personName},#{personEmail},#{commContent},#{createTime},#{commSort},#{commIp})
+		(#{articleId},#{parentId},#{personName},#{personEmail},#{personUrl},#{commContent},#{createTime},#{commSort},#{commIp})
 	</insert>
 	
 	<delete id="deleteComment" parameterType="integer">

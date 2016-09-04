@@ -28,7 +28,6 @@
 				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
 			</list>
 		</property>
-	
 	</bean>
 
 	<!-- 配置视图解析器 要求将jstl的包加到classpath -->
@@ -37,5 +36,8 @@
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+
+	<!-- 统一异常处理 -->
+	<bean class="com.ares.common.exception.commonresolver.SimpleExceptionResolver"/>
 
 </beans>

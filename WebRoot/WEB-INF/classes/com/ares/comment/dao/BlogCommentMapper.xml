@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ares.comment.dao.BlogCommentMapper">
+	<resultMap id="BaseResultMap" type="com.ares.comment.po.BlogComment">
+		<id column="comm_id" property="commId" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="person_name" property="personName" jdbcType="VARCHAR" />
+		<result column="person_email" property="personEmail" jdbcType="VARCHAR" />
+		<result column="person_url" property="personUrl" jdbcType="VARCHAR" />
+		<result column="comm_content" property="commContent" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="comm_sort" property="commSort" jdbcType="INTEGER" />
+		<result column="comm_ip" property="commIp" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="addBlogComment" parameterType="com.ares.comment.po.BlogComment">
+		INSERT INTO blog_comment
+		(parent_id, person_name, person_email, person_url,comm_content, create_time, comm_sort, comm_ip)
+		VALUES
+		(#{parentId}, #{personName}, #{personEmail}, #{personUrl}, #{commContent}, #{createTime}, #{commSort}, #{commIp})
+	</insert>
+	<!-- 删除评论和关联 -->
+	<delete id="deleteBlogComment" parameterType="integer">
+		DELETE FROM blog_comment WHERE comm_id=#{commId} OR parent_id=#{commId}
+	</delete>
+	<select id="getBlogComment" resultMap="BaseResultMap">
+		SELECT * FROM blog_comment ORDER BY comm_id desc
+	</select>
+</mapper>

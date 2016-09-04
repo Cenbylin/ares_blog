@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ares.blogbase.dao.BlogBaseMapper">
+	<resultMap id="BaseResultMap" type="com.ares.blogbase.po.BlogBase">
+		<result column="blog_name" property="blogName" jdbcType="VARCHAR" />
+		<result column="admin_nickname" property="adminNickname"
+			jdbcType="VARCHAR" />
+		<result column="admin_password" property="adminPassword"
+			jdbcType="VARCHAR" />
+		<result column="git_account" property="gitAccount" jdbcType="VARCHAR" />
+		<result column="show_git" property="showGit" jdbcType="INTEGER" />
+		<result column="show_cv" property="showCv" jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="getBlogBase" resultMap="BaseResultMap">
+		SELECT * FROM blog_base
+	</select>
+	<select id="getBlogBaseByNicknameAndPassword" resultMap="BaseResultMap">
+		SELECT * FROM blog_base WHERE admin_nickname=#{nickname} AND admin_password=#{password}
+	</select>
+	<insert id="addBlogBase" parameterType="com.ares.blogbase.po.BlogBase">
+		INSERT INTO blog_base
+		(blog_name, admin_nickname, admin_password, git_account, show_git, show_cv)
+		VALUES
+		(#{blogName}, #{adminNickname}, #{adminPassword}, #{gitAccount}, #{showGit}, #{showCv})
+	</insert>
+	<update id="updateBlogBase" parameterType="com.ares.blogbase.po.BlogBase">
+		UPDATE blog_base SET
+		blog_name=#{blogName},
+		admin_nickname=#{adminNickname},
+		admin_password=#{adminPassword},
+		git_account=#{gitAccount},
+		show_git=#{showGit},
+		show_cv=#{showCv}
+	</update>
+	
+</mapper>
