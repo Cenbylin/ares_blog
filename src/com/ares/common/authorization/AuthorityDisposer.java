@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.ares.common.utils.Md5;
+import com.ares.common.utils.MD5Tool;
 
 /**
  * 权限校验器，1.0版本单用户。
@@ -16,9 +16,8 @@ public class AuthorityDisposer {
 	
 	public String getCurrentToken(){
 		if(StringUtils.isEmpty(token)){
-			Md5 md5  = new Md5(UUID.randomUUID().toString());
 			//生成token
-			this.token = md5.getStringDigest();
+			this.token = MD5Tool.getMD5(UUID.randomUUID().toString());
 		}
 		return token;
 	}

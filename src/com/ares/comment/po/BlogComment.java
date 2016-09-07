@@ -1,6 +1,9 @@
 package com.ares.comment.po;
 
 import java.util.Date;
+import java.util.List;
+
+import com.ares.article.po.ArticleComment;
 
 public class BlogComment {
     private Integer commId;
@@ -20,6 +23,8 @@ public class BlogComment {
     private Integer commSort;
 
     private String commIp;
+    
+    private List<ArticleComment> childComms;
 
     public Integer getCommId() {
         return commId;
@@ -91,5 +96,13 @@ public class BlogComment {
 
 	public void setPersonUrl(String personUrl) {
 		this.personUrl = personUrl;
+	}
+
+	public List<ArticleComment> getChildComms() {
+		return childComms;
+	}
+
+	public void setChildComms(List<ArticleComment> childComms) {
+		this.childComms = childComms;
 	}
 }

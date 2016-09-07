@@ -13,4 +13,8 @@
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
 	<bean class="com.ares.article.service.ArticleService"></bean>
+	<bean class="com.ares.article.service.ArticleCommentService"></bean>
+	<bean class="com.ares.article.service.ArticleTagService"></bean>
+	<bean class="com.ares.blogbase.service.BlogBaseService"></bean>
+	<bean class="com.ares.comment.service.BlogCommentService"></bean>
 </beans>

@@ -25,4 +25,7 @@
 	<select id="getBlogComment" resultMap="BaseResultMap">
 		SELECT * FROM blog_comment ORDER BY comm_id desc
 	</select>
+	<select id="getSecondComm" parameterType="integer" resultMap="BaseResultMap">
+		SELECT * FROM blog_comment WHERE parent_id=#{topCommId}
+	</select>
 </mapper>

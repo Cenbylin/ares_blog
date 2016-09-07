@@ -19,7 +19,6 @@ import com.ares.article.service.ArticleService;
 @Controller
 @RequestMapping("article")
 public class ArticleController {
-	
 	@Autowired
 	ArticleService articleService;
 	

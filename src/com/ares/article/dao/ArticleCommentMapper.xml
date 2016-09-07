@@ -21,7 +21,7 @@
 	</insert>
 	
 	<delete id="deleteComment" parameterType="integer">
-		DELETE FROM article_comment WHERE comm_id=#{commId}
+		DELETE FROM article_comment WHERE comm_id=#{commId} OR parent_id=#{commId}
 	</delete>
 	
 	<delete id="deleteComments" parameterType="java.util.List">

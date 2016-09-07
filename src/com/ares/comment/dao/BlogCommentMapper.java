@@ -2,6 +2,7 @@ package com.ares.comment.dao;
 
 import java.util.List;
 
+import com.ares.article.po.ArticleComment;
 import com.ares.comment.po.BlogComment;
 
 
@@ -23,4 +24,11 @@ public interface BlogCommentMapper {
 	 * @throws Exception
 	 */
 	public List<BlogComment> getBlogComment() throws Exception;
+	/**
+	 * 获得二级留言
+	 * @param topCommId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ArticleComment> getSecondComm(Integer topCommId) throws Exception;
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +42,9 @@ public class SimpleExceptionResolver implements HandlerExceptionResolver {
 			res.put("ErrorMessage", exception.getMessage());
 		}else if (exception instanceof InvalidTokenException) {
 			res.put("ErrorCode", 66003);
+			res.put("ErrorMessage", exception.getMessage());
+		}else if (exception instanceof LoginException) {
+			res.put("ErrorCode", 66004);
 			res.put("ErrorMessage", exception.getMessage());
 		}else {
 			res.put("ErrorCode", 66000);
