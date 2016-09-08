@@ -51,9 +51,9 @@ public class SimpleExceptionResolver implements HandlerExceptionResolver {
 			res.put("ErrorMessage", "未知错误！");
 		}
 		
-		//ajax统一返回
+		//ajax统一返回application/json
 		try {
-			MVCControler.ajax(mapper.writeValueAsString(res), "application/json", request, response);
+			MVCControler.ajax(mapper.writeValueAsString(res), "text/html", request, response);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

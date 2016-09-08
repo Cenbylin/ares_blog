@@ -24,7 +24,16 @@
 	<select id="getTags" resultMap="BaseResultMap">
 		SELECT * FROM article_tag
 	</select>
-	
+	<insert id="updateTagOfArticle" parameterType="com.ares.article.po.ArticleAndTags">
+		<!-- 删除 -->
+		DELETE FROM tag_of_article WHERE article_id=#{articleId};
+		<foreach item="item" index="index" collection="tagIds" open="" separator=";" close=";">
+			INSERT INTO tag_of_article
+			(article_id, tag_id)
+			VALUES
+			(#{articleId}, #{item})
+		</foreach>
+	</insert>
 	<!-- 多对多关联查询 -->
 	<select id="getTagByArticleId" parameterType="integer" resultMap="BaseResultMap">
 		SELECT * FROM article_tag

@@ -1,5 +1,6 @@
 package com.ares.article.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ares.article.dao.ArticleCommentMapper;
 import com.ares.article.dao.ArticleMapper;
 import com.ares.article.dao.ArticleTagMapper;
+import com.ares.article.po.ArticleAndTags;
 import com.ares.article.po.ArticleBase;
 import com.ares.article.po.ArticleComment;
 import com.ares.common.authorization.AuthorityDisposer;
@@ -40,6 +42,7 @@ public class ArticleService {
 			throw new NoDataException("No such article with id(" + articleId + ")");
 		}
 		bean.setArticleComms(getArticleComments(articleId));
+		bean.setArticleContentStr(ByteBlobTool.blobToString(bean.getArticleContent()));
 		return bean;
 	}
 	/**
@@ -54,14 +57,28 @@ public class ArticleService {
 		}
 		//初始数据
 		articleBase.setCreateTime(new Date());
+		articleBase.setArticleContent(articleBase.getArticleContentStr().getBytes("UTF-8"));
 		//截取博文摘要
 		if (StringUtils.isEmpty(articleBase.getArticleIntro())) {
 			String longContent = HtmlTool.stripHtml(ByteBlobTool.blobToString(articleBase.getArticleContent()));
 			articleBase.setArticleIntro(longContent.length()>50 ? longContent.substring(0, 50):longContent);
 		}
 		articleMapper.addArticle(articleBase);
+		//增加标签关联
+		List<Integer> tags = new ArrayList<Integer>();
+		String[] tagss = articleBase.getTags().split(",");
+		for (int i = 0; i < tagss.length; i++) {
+			tags.add(Integer.valueOf(tagss[i]));
+		}
+		ArticleAndTags articleAndTags = new ArticleAndTags(articleBase.getArticleId(), tags);
+		articleTagMapper.updateTagOfArticle(articleAndTags);
 	}
-	
+	/**
+	 * 更新文章
+	 * @param articleBase
+	 * @param token
+	 * @throws Exception
+	 */
 	public void updateArticle(ArticleBase articleBase, String token) throws Exception{
 		//校验token
 		if (!authorityDisposer.validate(token)) {
@@ -73,6 +90,14 @@ public class ArticleService {
 			articleBase.setArticleIntro(longContent.length()>50 ? longContent.substring(0, 50):longContent);
 		}
 		articleMapper.updateArticle(articleBase);
+		//增加标签关联
+		List<Integer> tags = new ArrayList<Integer>();
+		String[] tagss = articleBase.getTags().split(",");
+		for (int i = 0; i < tagss.length; i++) {
+			tags.add(Integer.valueOf(tagss[i]));
+		}
+		ArticleAndTags articleAndTags = new ArticleAndTags(articleBase.getArticleId(), tags);
+		articleTagMapper.updateTagOfArticle(articleAndTags);
 	}
 	/**
 	 * 获得文章列表
@@ -105,11 +130,52 @@ public class ArticleService {
 		if (!authorityDisposer.validate(token)) {
 			throw new InvalidTokenException("token过期");
 		}
+		ArticleBase bean = articleMapper.getArticleById(articleId);
+		if (bean==null) {
+			throw new NoDataException("No such article with id(" + articleId + ")");
+		}
 		articleMapper.deleteArticleById(articleId);
 		//级联删除
 		articleCommentMapper.deleteComments(articleCommentMapper.getAllByArticle(articleId));
 	}
-	
+	/**
+	 * 移动到回收站
+	 * @param articleId
+	 * @param token
+	 * @throws Exception
+	 */
+	public void moveToRecycle(Integer articleId, String token) throws Exception{
+		//校验token
+			if (!authorityDisposer.validate(token)) {
+				throw new InvalidTokenException("token过期");
+			}
+			ArticleBase bean = articleMapper.getArticleById(articleId);
+			if (bean==null) {
+				throw new NoDataException("No such article with id(" + articleId + ")");
+			}
+			//更新状态
+			bean.setArticleState(1);
+			articleMapper.updateArticle(bean);
+	}
+	/**
+	 * 移出回收站
+	 * @param articleId
+	 * @param token
+	 * @throws Exception
+	 */
+	public void moveOutRecycle(Integer articleId, String token) throws Exception{
+		//校验token
+			if (!authorityDisposer.validate(token)) {
+				throw new InvalidTokenException("token过期");
+			}
+			ArticleBase bean = articleMapper.getArticleById(articleId);
+			if (bean==null) {
+				throw new NoDataException("No such article with id(" + articleId + ")");
+			}
+			//更新状态
+			bean.setArticleState(0);
+			articleMapper.updateArticle(bean);
+	}
 	public List<ArticleComment> getArticleComments(Integer articleId) throws Exception{
 		List<ArticleComment> topComms = articleCommentMapper.getTopCommByArticle(articleId);
 		//遍历获得二级回复

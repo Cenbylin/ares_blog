@@ -13,6 +13,8 @@ public class ArticleComment {
     private String personName;
     
     private String personEmail;
+    
+    private String personUrl;
 
     private String commContent;
 
@@ -102,5 +104,13 @@ public class ArticleComment {
 
 	public void setChildComms(List<ArticleComment> childComms) {
 		this.childComms = childComms;
+	}
+
+	public String getPersonUrl() {
+		return personUrl;
+	}
+
+	public void setPersonUrl(String personUrl) {
+		this.personUrl = personUrl;
 	}
 }

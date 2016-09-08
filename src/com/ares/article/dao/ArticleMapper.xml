@@ -77,6 +77,9 @@
 	</update>
 	
 	<insert id="addArticle" parameterType="com.ares.article.po.ArticleBase">
+		<selectKey keyProperty="articleId" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
 		INSERT INTO article_base (article_sort,article_title,create_time,article_state,article_intro,article_content)
 		VALUES
 		((<include refid="getMaxSort"/>),#{articleTitle},#{createTime},#{articleState},#{articleIntro},#{articleContent});

@@ -20,11 +20,15 @@ public class ArticleBase {
     @JsonIgnore
     private byte[] articleContent;
     
+    private String articleContentStr;
+    
     private Integer commentNum;
     
     private Integer shareNum;
     
     private Integer watchNum;
+    //逗号分隔
+    private String tags;
     
     private List<ArticleComment> articleComms;
     
@@ -124,5 +128,21 @@ public class ArticleBase {
 
 	public void setArticleTags(List<ArticleTag> articleTags) {
 		this.articleTags = articleTags;
+	}
+
+	public String getArticleContentStr() {
+		return articleContentStr;
+	}
+
+	public void setArticleContentStr(String articleContentStr) {
+		this.articleContentStr = articleContentStr;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 }
