@@ -110,7 +110,7 @@ public class ArticleController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/recycle", method=RequestMethod.POST)
+	@RequestMapping(value="/recycle", method=RequestMethod.DELETE)
 	public @ResponseBody HashMap<String, Object> moveOutRecycle(@PathVariable("articleId") int articleId, 
 			@RequestParam(value="token") String token) throws Exception{
 		HashMap<String, Object> res = new HashMap<String, Object>();

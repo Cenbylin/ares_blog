@@ -63,6 +63,8 @@
 	<delete id="deleteArticleById" parameterType="integer">
 		DELETE FROM article_base WHERE article_id=#{articleId};
 		DELETE FROM article_data WHERE article_id=#{articleId};
+		DELETE FROM tag_of_article WHERE article_id=#{articleId};
+		DELETE FROM article_comment WHERE article_id=#{articleId};
 	</delete>
 	
 	<update id="updateArticle" parameterType="com.ares.article.po.ArticleBase">

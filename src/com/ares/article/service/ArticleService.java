@@ -90,7 +90,7 @@ public class ArticleService {
 			articleBase.setArticleIntro(longContent.length()>50 ? longContent.substring(0, 50):longContent);
 		}
 		articleMapper.updateArticle(articleBase);
-		//增加标签关联
+		//改变标签关联
 		List<Integer> tags = new ArrayList<Integer>();
 		String[] tagss = articleBase.getTags().split(",");
 		for (int i = 0; i < tagss.length; i++) {

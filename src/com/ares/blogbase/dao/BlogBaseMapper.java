@@ -27,5 +27,10 @@ public interface BlogBaseMapper {
 	 * @throws Exception
 	 */
 	public void updateBlogBase(BlogBase blogBase) throws Exception;
-
+	/**
+	 * 修改密码
+	 * @param adminPassword
+	 * @throws Exception
+	 */
+	public void updatePassword(String adminPassword) throws Exception;
 }

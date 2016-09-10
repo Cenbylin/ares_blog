@@ -23,13 +23,15 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:spring/springmvc.xml</param-value>
 		</init-param>
+		<init-param>
+			<param-name>readonly</param-name>
+			<param-value>false</param-value>
+		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
-	
 	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

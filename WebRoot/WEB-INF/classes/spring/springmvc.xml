@@ -29,7 +29,20 @@
 			</list>
 		</property>
 	</bean>
-
+	
+	<mvc:interceptors>
+           <mvc:interceptor>
+           <mvc:mapping path="/**" />
+           <bean class="com.ares.common.CommonInterceptor">
+           <property name="excludedUrls">
+            <list>
+                <value>/</value>
+            </list>
+           </property>
+           </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
 	<!-- 配置视图解析器 要求将jstl的包加到classpath -->
 	<!-- ViewResolver -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -24,14 +24,18 @@
 		VALUES
 		(#{blogName}, #{adminNickname}, #{adminPassword}, #{gitAccount}, #{showGit}, #{showCv})
 	</insert>
+	<!-- 不更新密码 -->
 	<update id="updateBlogBase" parameterType="com.ares.blogbase.po.BlogBase">
 		UPDATE blog_base SET
 		blog_name=#{blogName},
 		admin_nickname=#{adminNickname},
-		admin_password=#{adminPassword},
 		git_account=#{gitAccount},
 		show_git=#{showGit},
 		show_cv=#{showCv}
+	</update>
+	<update id="updatePassword" parameterType="String">
+		UPDATE blog_base SET
+		admin_password=#{adminPassword}
 	</update>
 	
 </mapper>
