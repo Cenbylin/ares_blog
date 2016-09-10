@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ares.article.po.ArticleBase;
+import com.ares.article.po.ArticleComment;
 import com.ares.article.service.ArticleService;
 
 /**
@@ -95,7 +96,7 @@ public class ArticleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/recycle", method=RequestMethod.POST)
-	public @ResponseBody HashMap<String, Object> moveToRecycle(@PathVariable("articleId") int articleId, 
+	public @ResponseBody HashMap<String, Object> moveToRecycle(@RequestParam("articleId") int articleId, 
 			@RequestParam(value="token") String token) throws Exception{
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		res.put("state", true);
@@ -132,6 +133,38 @@ public class ArticleController {
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		res.put("state", true);
 		articleService.deleteArticle(articleId, token);
+		//异常交由统一异常处理
+		return res;
+	}
+	/**
+	 * 发表回复
+	 * @param articleId
+	 * @param articleComment
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/comment", method=RequestMethod.POST)
+	public @ResponseBody HashMap<String, Object> addArticleComment(@RequestParam("articleId") int articleId, 
+			ArticleComment articleComment) throws Exception{
+		HashMap<String, Object> res = new HashMap<String, Object>();
+		res.put("state", true);
+		articleService.addArticleComment(articleId, articleComment);
+		//异常交由统一异常处理
+		return res;
+	}
+	/**
+	 * 删除回复
+	 * @param commId
+	 * @param token
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/comment/{commId}", method=RequestMethod.DELETE)
+	public @ResponseBody HashMap<String, Object> deleteArticleComment(@PathVariable("commId") Integer commId, 
+			String token) throws Exception{
+		HashMap<String, Object> res = new HashMap<String, Object>();
+		res.put("state", true);
+		articleService.deleteArticleComment(commId, token);
 		//异常交由统一异常处理
 		return res;
 	}

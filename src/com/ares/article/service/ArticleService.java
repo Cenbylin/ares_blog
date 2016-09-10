@@ -16,6 +16,7 @@ import com.ares.article.po.ArticleComment;
 import com.ares.common.authorization.AuthorityDisposer;
 import com.ares.common.exception.InvalidTokenException;
 import com.ares.common.exception.NoDataException;
+import com.ares.common.exception.ParamErrorException;
 import com.ares.common.utils.ByteBlobTool;
 import com.ares.common.utils.Constants;
 import com.ares.common.utils.HtmlTool;
@@ -165,16 +166,45 @@ public class ArticleService {
 	 */
 	public void moveOutRecycle(Integer articleId, String token) throws Exception{
 		//校验token
-			if (!authorityDisposer.validate(token)) {
-				throw new InvalidTokenException("token过期");
-			}
-			ArticleBase bean = articleMapper.getArticleById(articleId);
-			if (bean==null) {
-				throw new NoDataException("No such article with id(" + articleId + ")");
-			}
-			//更新状态
-			bean.setArticleState(0);
-			articleMapper.updateArticle(bean);
+		if (!authorityDisposer.validate(token)) {
+			throw new InvalidTokenException("token过期");
+		}
+		ArticleBase bean = articleMapper.getArticleById(articleId);
+		if (bean==null) {
+			throw new NoDataException("No such article with id(" + articleId + ")");
+		}
+		//更新状态
+		bean.setArticleState(0);
+		articleMapper.updateArticle(bean);
+	}
+	/**
+	 * 新增回复
+	 * @param articleId
+	 * @param articleComment
+	 * @throws Exception
+	 */
+	public void addArticleComment(Integer articleId, ArticleComment articleComment) throws Exception{
+		if (articleId==null && articleComment.getArticleId()==null) {
+			throw new ParamErrorException("参数错误，没有博文id");
+		}
+		//初始化数据
+		articleComment.setArticleId(articleId);
+		articleComment.setCreateTime(new Date());
+		articleComment.setCommSort(0);
+		articleCommentMapper.addComment(articleComment);
+	}
+	/**
+	 * 删除回复
+	 * @param commId
+	 * @param token
+	 * @throws Exception
+	 */
+	public void deleteArticleComment(Integer commId, String token) throws Exception{
+		//校验token
+		if (!authorityDisposer.validate(token)) {
+			throw new InvalidTokenException("token过期");
+		}
+		articleCommentMapper.deleteComment(commId);
 	}
 	public List<ArticleComment> getArticleComments(Integer articleId) throws Exception{
 		List<ArticleComment> topComms = articleCommentMapper.getTopCommByArticle(articleId);
